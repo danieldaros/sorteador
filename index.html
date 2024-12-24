@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sorteador de Números</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 20px;
+      height: 100vh;
+      background-color: #f0f8ff;
+    }
+    .container {
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    input, button {
+      font-size: 18px;
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+    }
+    .number-display {
+      font-size: 40px;
+      font-weight: bold;
+      color: #333;
+      margin: 20px 0;
+    }
+    .history {
+      font-size: 16px;
+      text-align: left;
+      background: #ffffff;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Sorteador de Números</h1>
+    <input type="number" id="maxNumber" placeholder="Número máximo" min="1">
+    <button id="drawButton">Sortear Número</button>
+    <div class="number-display" id="currentNumber">?</div>
+    <h3>Histórico de Números Sorteados</h3>
+    <div class="history" id="history"></div>
+    <button id="resetButton">Reiniciar Jogo</button>
+  </div>
+
+  <script>
+    const maxNumberInput = document.getElementById('maxNumber');
+    const drawButton = document.getElementById('drawButton');
+    const resetButton = document.getElementById('resetButton');
+    const currentNumberDisplay = document.getElementById('currentNumber');
+    const historyDisplay = document.getElementById('history');
+
+    let maxNumber = 0;
+    let drawnNumbers = [];
+
+    drawButton.addEventListener('click', () => {
+      maxNumber = parseInt(maxNumberInput.value);
+      if (isNaN(maxNumber) || maxNumber < 1) {
+        alert('Por favor, insira um número máximo válido.');
+        return;
+      }
+
+      if (drawnNumbers.length === maxNumber) {
+        alert('Todos os números já foram sorteados!');
+        return;
+      }
+
+      let number;
+      do {
+        number = Math.floor(Math.random() * maxNumber) + 1;
+      } while (drawnNumbers.includes(number));
+
+      drawnNumbers.push(number);
+      currentNumberDisplay.textContent = number;
+      updateHistory();
+    });
+
+    resetButton.addEventListener('click', () => {
+      drawnNumbers = [];
+      currentNumberDisplay.textContent = '?';
+      historyDisplay.innerHTML = '';
+    });
+
+    function updateHistory() {
+      historyDisplay.innerHTML = drawnNumbers.join(', ');
+    }
+  </script>
+</body>
+</html>
